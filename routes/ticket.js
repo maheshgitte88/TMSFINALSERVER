@@ -750,6 +750,13 @@ const sendUpdatedEmailToAll = async (data) => {
       console.log("No users found in the specified department.");
       return;
     }
+    const createdUser = await User.findOne({
+      where: {
+        user_id: user_id,
+        user_status: "Active",
+      },
+      attributes: ["user_Email", "user_Name", "user_Roal"],
+    });
 
     const emailBodyUser = `
     <div style="font-family: Arial, sans-serif; color: #333;">
@@ -839,13 +846,7 @@ const sendUpdatedEmailToAll = async (data) => {
   </div>
     `;
 
-    const createdUser = await User.findOne({
-      where: {
-        user_id: user_id,
-        user_status: "Active",
-      },
-      attributes: ["user_Email", "user_Name", "user_Roal"],
-    });
+ 
 
     if (TransferDescription && Status === "Resolved") {
       sendEmail(
