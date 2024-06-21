@@ -2,8 +2,8 @@ const express = require("express");
 const { Server } = require("socket.io");
 const cors = require("cors");
 const fs = require("fs");
-const https = require('https');
-// const http = require("http");
+// const https = require('https');
+const http = require("http");
 
 const cloudinary = require("./cloudinaryConfig");
 require("dotenv").config();
@@ -21,14 +21,14 @@ const port = process.env.PORT || 2000;
 const app = express();
 
 // Read the certificate and private key
-const options = {
-  key: fs.readFileSync("key.pem"),
-  cert: fs.readFileSync("cert.pem"),
-};
+// const options = {
+//   key: fs.readFileSync("key.pem"),
+//   cert: fs.readFileSync("cert.pem"),
+// };
 
 // Create the HTTPS server
-const server = https.createServer(options, app);
-// const server = http.createServer(app);
+// const server = https.createServer(options, app);
+const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
