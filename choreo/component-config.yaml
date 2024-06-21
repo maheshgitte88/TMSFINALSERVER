@@ -1,0 +1,49 @@
+apiVersion: choreo.dev/v1alpha1
+kind: Component
+metadata:
+  name: my-nodejs-app
+spec:
+  type: webapp
+  source:
+    git:
+      url: https://github.com/your-repo/my-nodejs-app.git
+      branch: main
+  build:
+    env:
+      - name: NODE_ENV
+        value: production
+    commands:
+      preBuild:
+        - npm install
+      build:
+        - npm run build
+  run:
+    env:
+      - name: PORT
+        value: "8080"
+    command: ["npm", "start"]
+    port: 8080
+  scaling:
+    replicas: 2
+    minReplicas: 1
+    maxReplicas: 10
+  monitoring:
+    enabled: true
+    endpoints:
+      - path: /health
+        intervalSeconds: 60
+        timeoutSeconds: 5
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 250m
+      memory: 256Mi
+  ingress:
+    enabled: true
+    host: my-nodejs-app.choreo.dev
+    path: /
+    tls:
+      enabled: true
+      secretName: tls-secret
